@@ -38,7 +38,7 @@ fn get_set_name() -> String {
 
 fn sort_names(mut names: Vec<String>) -> Vec<String> {
   //sort name array by length of name
-  names.sort();
+  names.sort_by(|a, b| a.len().cmp(&b.len()));
   names
 }
 
