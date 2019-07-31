@@ -30,7 +30,7 @@ fn run_test_case(n: u32) -> (u32, u32, u32) {
 }
 
 fn get_s1(n: u32) -> u32 {
-  (1..n+1).fold(0, |a, b| a + b)
+  (1..n+1).sum()
 }
 
 fn get_s2(mut n: u32) -> u32 {
