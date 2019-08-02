@@ -20,7 +20,7 @@ fn get_input() -> (u32, u32) {
 fn calculate_carries(mut inp1: u32, mut inp2: u32) -> u8 {
   let mut current_carry = 0 as u8;
   let mut total_carries = 0;
-  while inp1 > 0 && inp2 > 0 {
+  while (inp1 > 0 && inp2 > 0) || current_carry > 0 {
     current_carry = calculate_carry(inp1 % 10, inp2 % 10, current_carry);
     if current_carry > 0 {
       total_carries += 1;
@@ -33,7 +33,7 @@ fn calculate_carries(mut inp1: u32, mut inp2: u32) -> u8 {
   total_carries
 }
 
-fn calculate_carry(inp1: u32, inp2: u32) -> u8 {
+fn calculate_carry(inp1: u32, inp2: u32, current_carry: u8) -> u8 {
   (((inp1 + inp2 + current_carry as u32) / 10 ) % 10) as u8
 }
 
