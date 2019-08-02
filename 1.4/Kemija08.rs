@@ -16,23 +16,28 @@ fn get_input() -> Vec<String> {
 fn decrypt_input(input: Vec<String>) -> Vec<String> {
   let mut decrypted_input: Vec<String> = Vec::new();
   for word in input {
-    let mut decrypted_word: String = "".to_string();
-    let mut to_skip = 0;
-    for c in word.chars() {
-      if to_skip > 0 {
-        to_skip -= 1;
-        continue;
-      }
-
-      decrypted_word += &(c.to_string());
-
-      if VOWELS.contains(&c) {
-        to_skip = 2;
-      } 
-    }
-
+    let decrypted_word = decrypt_word(word); 
     decrypted_input.push(decrypted_word);
   }
 
   decrypted_input
+}
+
+fn decrypt_word(word: String) -> String {
+  let mut decrypted_word: String = "".to_string();
+  let mut to_skip = 0;
+  for c in word.chars() {
+    if to_skip > 0 {
+      to_skip -= 1;
+      continue;
+    }
+
+    decrypted_word += &(c.to_string());
+
+    if VOWELS.contains(&c) {
+      to_skip = 2;
+    }
+  }
+
+  decrypted_word
 }
