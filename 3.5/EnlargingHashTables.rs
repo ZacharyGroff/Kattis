@@ -1,11 +1,8 @@
 fn main() {
-  let (largest, inputs) = get_inputs();
-  let ceil: u32 = (largest*2) + 350;
-  let mut primes = init_vec(ceil);
-  set_primes(ceil, &mut primes);
+  let inputs = get_inputs();
   for input in inputs {
-    let closest_prime = find_closest_prime(input*2, &primes);
-    if primes[input as usize] {
+    let closest_prime = find_closest_prime(input*2);
+    if is_prime(input) {
       println!("{}", closest_prime);
     } else {
       println!("{} ({} is not prime)", closest_prime, input);
@@ -13,23 +10,17 @@ fn main() {
   }
 }
 
-fn get_inputs() -> (u32, Vec<u32>) {
-  let mut largest: u32 = 0;
+fn get_inputs() -> Vec<u32> {
   let mut inputs: Vec<u32> = Vec::new();
   loop {
     let input = get_input_line();
     if input == 0 {
       break
     }
-
-    if largest < input {
-      largest = input;
-    }
-
     inputs.push(input);
   }
 
-  (largest, inputs)
+  inputs
 }
 
 fn get_input_line() -> u32 {
@@ -39,39 +30,24 @@ fn get_input_line() -> u32 {
   input.trim().parse().expect("wanted a number")
 }
 
-fn set_primes(ceil: u32, primes: &mut Vec<bool>) {
-  let mut p: u32 = 2;
-  loop {
-    if p*p > ceil {
-      break
-    }
-
-    if primes[p as usize] == true {
-      let mut i: u32 = p*p;
-      loop {
-        if i > ceil {
-          break;
-        }
-        primes[i as usize] = false;
-        i += p;
-      }
-    }
-
-    p += 1;
-  }
-}
-
-fn init_vec(ceil: u32) -> Vec<bool> {
-  let mut vec: Vec<bool> = Vec::new();
-  for _ in 0..ceil+1 {
-    vec.push(true);
+fn is_prime(n: u32) -> bool {
+  let mut prime: bool = true;
+  if n == 2 {
+    return prime;
   }
 
-  vec
+  let ceil: u32 = (n as f64).sqrt() as u32 + 1;
+  for i in 2..ceil {
+    if n % i == 0 {
+      prime = false;
+    }
+  }
+
+  prime
 }
 
-fn find_closest_prime(mut n: u32, primes: &Vec<bool>) -> u32 {
-  while !primes[n as usize] {
+fn find_closest_prime(mut n: u32) -> u32 {
+  while !is_prime(n) {
     n += 1;
   }
 
