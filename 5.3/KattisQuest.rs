@@ -3,7 +3,7 @@ use std::collections::BinaryHeap;
 
 fn main() {
   let n = get_n();
-  let mut map: HashMap<u16, BinaryHeap<u16>> = HashMap::new();
+  let mut map: HashMap<u32, BinaryHeap<u32>> = HashMap::new();
   for _ in 0..n {
     let input = try_get_input_line();
     if input == "" {
@@ -19,7 +19,7 @@ fn main() {
   }
 }
 
-fn get_n() -> u16 {
+fn get_n() -> u32 {
   let mut input = String::new();
   let _ = std::io::stdin().read_line(&mut input);
   
@@ -34,27 +34,27 @@ fn try_get_input_line() -> String {
   }
 }
 
-fn parse_add(input: String) -> (u16, u16) {
+fn parse_add(input: String) -> (u32, u32) {
   let vec: Vec<String> = input.split(" ").map(String::from).collect();
-  let energy: u16 = vec[1].parse().expect("wanted a number");
-  let gold: u16 = vec[2].parse().expect("wanted a number");
+  let energy: u32 = vec[1].parse().expect("wanted a number");
+  let gold: u32 = vec[2].parse().expect("wanted a number");
 
   (energy, gold)
 }
 
-fn parse_query(input: String) -> u16 {
+fn parse_query(input: String) -> u32 {
   let vec: Vec<String> = input.split(" ").map(String::from).collect();
-  let energy: u16 = vec[1].parse().expect("wanted a number");
+  let energy: u32 = vec[1].parse().expect("wanted a number");
 
   energy
 }
 
-fn add(map: &mut HashMap<u16, BinaryHeap<u16>>, energy: u16, gold: u16) {
+fn add(map: &mut HashMap<u32, BinaryHeap<u32>>, energy: u32, gold: u32) {
   let heap = map.entry(energy).or_insert(BinaryHeap::new());
   heap.push(gold);
 } 
 
-fn query(map: &mut HashMap<u16, BinaryHeap<u16>>, energy: u16) -> u16 {
+fn query(map: &mut HashMap<u32, BinaryHeap<u32>>, energy: u32) -> u32 {
   let mut count = energy.clone();
   let mut remaining_energy = energy.clone();
   let mut total_gold = 0;
@@ -62,8 +62,8 @@ fn query(map: &mut HashMap<u16, BinaryHeap<u16>>, energy: u16) -> u16 {
     let heap = map.entry(count).or_insert(BinaryHeap::new());
     if heap.peek() != None {
       match heap.pop() {
-        Some(x) => {
-          total_gold += x;
+        Some(gold) => {
+          total_gold += gold;
           remaining_energy -= count;
         },
         _ => (),
