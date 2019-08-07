@@ -65,6 +65,8 @@ fn query(map: &mut HashMap<u32, BinaryHeap<u32>>, energy: u32) -> u32 {
         Some(gold) => {
           total_gold += gold;
           remaining_energy -= count;
+          count = remaining_energy.clone();
+          continue;
         },
         _ => (),
       }
