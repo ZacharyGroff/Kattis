@@ -13,14 +13,19 @@ void get_permutations(std::set<std::string> &permutations, std::string number, i
   }
 }
 
+std::string get_result(std::string number, std::set<std::string> permutations) {
+  auto it = permutations.lower_bound(number);
+  return it == --permutations.end() ? "0" : *++it;
+}
+
 int main() {
   std::string number;
   std::cin >> number;
   int end = number.size() - 1;
-  
+
   std::set<std::string> permutations;
   get_permutations(permutations, number, 0, end);
   
-  auto it = permutations.lower_bound(number);
-  std::cout << (it == --permutations.end() ? "0" : *++it) << std::endl;
+  std::string result = get_result(number, permutations);
+  std::cout << result << std::endl;
 }
