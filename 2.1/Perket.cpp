@@ -3,13 +3,13 @@
 #include <cmath>
 #include <cstdlib>
 
-int get_total_sb(int subset, int n, std::pair<int, int> sbs[]) {
+int get_total_sb(int mask, int n, std::pair<int, int> sbs[]) {
   int sourness = 1;
   int bitterness = 0;
-  for (int i = 0; i < n; i++) {
-    if ((subset & (1 << i)) != 0) {
-      sourness *= sbs[i].first;
-      bitterness += sbs[i].second;
+  for (int bit = 0; bit < n; bit++) {
+    if ((mask & (1 << bit)) != 0) {
+      sourness *= sbs[bit].first;
+      bitterness += sbs[bit].second;
     }
   }
   return abs(sourness - bitterness);
@@ -27,8 +27,8 @@ int main() {
   }
   
   int min_sb = 2147483647;
-  for (int i = 1; i < std::pow(2, n); i++) {
-    int sb = get_total_sb(i, n, ratings);
+  for (int mask = 1; mask < std::pow(2, n); mask++) {
+    int sb = get_total_sb(mask, n, ratings);
     if (min_sb > sb) {
       min_sb = sb;
     }
