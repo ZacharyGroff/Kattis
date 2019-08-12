@@ -2,6 +2,18 @@
 #include <set>
 #include <cmath>
 
+bool is_valid(int i, std::set<std::pair<int, int>> &restrictions) {
+  for (auto restriction : restrictions) {
+    bool contains_first = (i & (1 << (restriction.first-1))) != 0;
+    bool contains_second = (i & (1 << (restriction.second-1))) != 0;
+    if (contains_first && contains_second) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 int main() {
   int n, m;
   std::cin >> n >> m;
@@ -14,18 +26,13 @@ int main() {
   }
   
   int count = 0;
-  bool valid = true;
   for (int i = 0; i < std::pow(2, n); i++) {
-    for (auto restriction : restrictions) {
-      if (((i&(1 << (restriction.first-1))) != 0) && ((i&(1 << (restriction.second-1))) != 0)) {
-        valid = false;
-        break;
-      }
-    }
-    if (valid) {
+    if (is_valid(i, restrictions)) {
       count++;
     }
-    valid = true;
   }
+
   std::cout << count << std::endl;
+
+  return 0;
 }
