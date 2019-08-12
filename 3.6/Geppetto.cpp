@@ -12,25 +12,12 @@ int main() {
     std::cin >> x >> y;
     restrictions.insert(std::make_pair(x, y));
   }
-
-  std::set<std::set<int>> subsets;
-  for (int i = 0; i < std::pow(2, n); i++) {
-    std::set<int> subset;
-    for (int j = 0; j < n; j++) {
-      if ((i & (1 << j)) != 0) {
-        subset.insert(j+1);
-      }
-    }
-    if (subset.size() > 0) {
-      subsets.insert(subset);
-    } 
-  }
-
+  
   int count = 0;
-  for (auto subset : subsets) {
-    bool valid = true;
+  bool valid = true;
+  for (int i = 0; i < std::pow(2, n); i++) {
     for (auto restriction : restrictions) {
-      if (subset.find(restriction.first) != subset.end() && subset.find(restriction.second) != subset.end()) {
+      if (((i&(1 << (restriction.first-1))) != 0) && ((i&(1 << (restriction.second-1))) != 0)) {
         valid = false;
         break;
       }
@@ -38,7 +25,7 @@ int main() {
     if (valid) {
       count++;
     }
+    valid = true;
   }
-  
-  std::cout << count+1 << std::endl;
+  std::cout << count << std::endl;
 }
