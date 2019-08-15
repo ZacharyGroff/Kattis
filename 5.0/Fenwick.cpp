@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 long long length, ops;
 long long ftree[5000001];
