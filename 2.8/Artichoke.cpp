@@ -19,11 +19,9 @@ int main() {
   for (int i = 0; i < n; i++) {
     for (int j = i+1; j < n; j++) {
       double diff = prices[i] - prices[j];
-      if (prices[i] > prices[j]) {
-        if (diff > max_decline) {
-          max_decline = diff;
-        }
-      } else {
+      if (prices[i] > prices[j] && diff > max_decline) {
+        max_decline = diff;
+      } else if (prices[i] <= prices[j]) {
         break;
       }
     }
