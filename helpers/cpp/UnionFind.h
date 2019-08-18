@@ -1,12 +1,12 @@
 class UnionFind {
 private:
-  int *id, cnt, *sz;
+  int *ids, count, *set_sizes;
 public:
-  UnionFind(int N);
+  UnionFind(int n);
   ~UnionFind();
-  int find(int p);
-  void merge(int x, int y);
-  bool connected(int x, int y);
-  int count();
-  int size(int n);
+  int find_root(int p);
+  void _union(int x, int y);
+  bool are_connected(int x, int y);
+  int set_count();
+  int size_of_set(int n);
 };

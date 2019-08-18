@@ -1,60 +1,60 @@
 #include "UnionFind.h"
 
 UnionFind::UnionFind(int n) {
-  cnt = n;
-  id = new int[n];
-  sz = new int[n];
+  count = n;
+  ids = new int[n];
+  set_sizes = new int[n];
   for(int i = 0; i < n; i++)  {
-    id[i] = i;
-    sz[i] = 1;
+    ids[i] = i;
+    set_sizes[i] = 1;
   }
 }
 
 UnionFind::~UnionFind() {
-  delete [] id;
-  delete [] sz;
+  delete [] ids;
+  delete [] set_sizes;
 }
 
-int UnionFind::find(int p) {
+int UnionFind::find_root(int p) {
   int root = p;
-  while (root != id[root]) {
-      root = id[root];
+  while (root != ids[root]) {
+      root = ids[root];
   }
   while (p != root) {
-    int newp = id[p];
-    id[p] = root;
+    int newp = ids[p];
+    ids[p] = root;
     p = newp;
   }
 
   return root;
 }
 
-void UnionFind::merge(int x, int y) {
-  int i = find(x);
-  int j = find(y);
-  if (i == j) {
+void UnionFind::_union(int x, int y) {
+  int root1 = find_root(x);
+  int root2 = find_root(y);
+  if (root1 == root2) {
     return;
   }
 
-  if (sz[i] < sz[j]) { 
-    id[i] = j; 
-    sz[j] += sz[i]; 
+  if (set_sizes[root1] < set_sizes[root2]) { 
+    ids[root1] = root2; 
+    set_sizes[root2] += set_sizes[root1]; 
   } else { 
-    id[j] = i; 
-    sz[i] += sz[j]; 
+    ids[root2] = root1; 
+    set_sizes[root1] += set_sizes[root2]; 
   }
 
-  cnt--;
+  count--;
 }
 
-bool UnionFind::connected(int x, int y) {
-  return find(x) == find(y);
+bool UnionFind::are_connected(int x, int y) {
+  return find_root(x) == find_root(y);
 }
 
-int UnionFind::count() {
-  return cnt;
+int UnionFind::set_count() {
+  return count;
 }
 
-int UnionFind::size(int n) {
-  return sz[n];
+int UnionFind::size_of_set(int n) {
+  return set_sizes[n];
 }
