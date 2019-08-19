@@ -5,17 +5,11 @@ struct rect {
   int height, width;
 };
 
-void reverse(rect* r) {
-  int h = r->height;
-  r->height = r->width;
-  r->width = h;
-}
-
-bool can_be_square(rect* rect1, rect* rect2, rect* rect3) {
-  int sum_of_height = rect1->height + rect2->height + rect3->height;
-  if ((sum_of_height == rect1->width) && (sum_of_height == rect2->width) && (sum_of_height == rect3->width)) {
+bool can_be_square(int h1, int h2, int h3, int w1, int w2, int w3) {
+  int sum_of_height = h1 + h2 + h3;
+  if ((sum_of_height == w1) && w1 == w2 && w2 == w3) {
     return true;
-  } else if ((rect1->height == rect2->height + rect3->height) && (rect2->width == rect3->width) && (rect1->height == rect1->width + rect2->width)) {
+  } else if ((h1 == h2 + h3) && (w2 == w3) && (h1 == w1 + w2)) {
     return true;
   }
 
@@ -25,78 +19,27 @@ bool can_be_square(rect* rect1, rect* rect2, rect* rect3) {
 bool check(rect* rects[]) {
   bool success = false;
   do {
-    success = can_be_square(rects[0], rects[1], rects[2]);
+    success = can_be_square(rects[0]->height, rects[1]->height, rects[2]->height, rects[0]->width, rects[1]->width, rects[2]->width);
     if (success) {
       break;
     }
-  } while (std::next_permutation(rects, rects+3));
+  } while (std::next_permutation(rects, rects+6));
 
   return success;
 }
 
 int main() {
-  rect* rects[3];
-  bool success = false;
+  rect* rects[6];
   for (int i = 0; i < 3; i++) {
     int height, width;
     std::cin >> height >> width;
-    rects[i] = new rect{height=height, width=width};
+    rects[i] = new rect{height, width};
+    rects[i+3] = new rect{width, height};
   }
 
-  success = check(rects);
-  if (success) {
-    std::cout << "YES" << std::endl;
-    return 0;  
-  }
-  for (int i = 0; i < 3; i++) {
-    reverse(rects[i]);
-  }
-  success = check(rects);
-  if (success) {
-    std::cout << "YES" << std::endl;
-    return 0;
-  }
-  reverse(rects[0]);
-  success = check(rects);
-  if (success) {
-    std::cout << "YES" << std::endl;
-    return 0;
-  }
-  reverse(rects[0]);
-  reverse(rects[1]);
-  success = check(rects);
-  if (success) {
-    std::cout << "YES" << std::endl;
-    return 0;
-  }
-  reverse(rects[1]);
-  reverse(rects[2]);
-  success = check(rects);
-  if (success) {
-    std::cout << "YES" << std::endl;
-    return 0;
-  }
-  reverse(rects[1]);
-  success = check(rects);
-  if (success) {
-    std::cout << "YES" << std::endl;
-    return 0;
-  }
-  reverse(rects[1]);
-  reverse(rects[0]);
-  success = check(rects);
-  if (success) {
-    std::cout << "YES" << std::endl;
-    return 0;
-  }
-  reverse(rects[2]);
-  reverse(rects[1]);
-  success = check(rects);
-  if (success) {
-    std::cout << "YES" << std::endl;
-    return 0;
-  }
-  
-  std::cout << "NO" << std::endl;
+  bool success = check(rects);
+
+  std::cout << (success ? "YES" : "NO") << std::endl;
+
   return 0;
 }
