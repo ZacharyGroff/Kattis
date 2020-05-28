@@ -22,13 +22,21 @@ func NewUndirectedGraph() *UndirectedGraph {
 	}
 }
 
-func (g *UndirectedGraph) AddVertex(value string) {
+func (g *UndirectedGraph) AddVertex(value string) error {
 	var edges []*Node
 	node := Node{
 		value: value,
 		edges: edges,
 	}
+
+	_, err := find(g.vertices, value)
+	if err == nil {
+		return errors.New("vertex already exists in graph")
+	}
+
 	g.vertices = append(g.vertices, &node)
+
+	return nil
 }
 
 func (g *UndirectedGraph) RemoveVertex(value string) error {
@@ -97,6 +105,40 @@ func (g *UndirectedGraph) RemoveEdge(value1, value2 string) error {
 	node2.edges = append(node2.edges[:index2], node2.edges[index2+1:]...)
 
 	return nil
+}
+
+func Dfs(node *Node, action func(string), visited *[]*Node) {
+	if node == nil {
+		return
+	}
+
+	action(node.value)
+	*visited = append(*visited, node)
+
+	for _, child := range node.edges {
+		_, err := findIndex(*visited, child.value)
+		if err != nil {
+			Dfs(child, action, visited)
+		}
+	}
+}
+
+func Bfs(node *Node, action func(string)) {
+	marked := []*Node{node}
+	toVisit := []*Node{node}
+
+	for len(toVisit) > 0 {
+		action(toVisit[0].value)
+		for _, node := range toVisit[0].edges {
+			_, err := findIndex(marked, node.value)
+			if err != nil {
+				marked = append(marked, node)
+				toVisit = append(toVisit, node)
+			}
+		}
+		toVisit = toVisit[1:]
+	}
+
 }
 
 func (g *UndirectedGraph) Print() {
